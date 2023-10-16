@@ -27,16 +27,19 @@ class BPI:
 
             profundidade += 1
             for vizinho in problema.acao(estado):
-                para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto())
+                para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto()))
 
             # Algoritmo Geral:
             while para_visitar:
-                # tratamento rollback
-                while len(passos) > profundidade:
-                    passos.pop()
 
                 estado, profundidade, custo_atual = para_visitar.pop()
                 visitados[estado] = custo_atual
+
+                # tratamento do caminho
+                while len(passos) > profundidade:
+                    passos.pop()
+                passos.append(estado)
+
                 qtd_explorada += 1
                 
                 # Checa solução
@@ -53,7 +56,7 @@ class BPI:
                 profundidade += 1
                 for vizinho in problema.acao(estado):
                     if vizinho not in visitados.keys() or (custo_atual + vizinho.fnCusto()) < visitados[vizinho]
-                        para_Visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto()))
+                        para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto()))
 
 
         retorno = False
