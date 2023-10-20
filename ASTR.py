@@ -1,8 +1,8 @@
-from Estado     import Estado
-from Solucao    import Solucao
-from Problema   import Problema
+from Estado   import Estado
+from Solucao  import Solucao
+from Problema import Problema
 
-class BMC:
+class ASTR:
 
     @staticmethod
     def busca(problema: Problema) -> bool:
@@ -51,20 +51,22 @@ class BMC:
             profundidade += 1
             for vizinho in problema.acao(estado):
                 if vizinho not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho]:
-                    para_visitar.insert(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado)))
+                    para_visitar.insert(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado), vizinho.heuristica(problema.est_meta)))
 
         return False
 
 
 
     class Nodo():
-        def __init__(self, estado: Estado, profundidade: int, custo: int):
+        def __init__(self, estado: Estado, profundidade: int, custo: int, heuri: int):
             self.estado = estado
             self.profundidade = profundidade
             self.custo  = custo
+            self.heuri = heuri
 
         def __get(self):
             return (self.estado, self.profundidade, self.custo)
+
 
     class FilaPrior():
         def __init__(self):
@@ -75,7 +77,7 @@ class BMC:
             if self.fila != []:
                 # insersao por prioridade
                 for idx, elem in enumerate(self.fila):
-                    if nodo.custo <= elem.custo:
+                    if (nodo.custo + nodo.heuri) <= (elem.custo + elem.heuri): 
                         self.fila.insert(idx, nodo)
                         return
 
@@ -86,4 +88,3 @@ class BMC:
         def pop(self) -> (Estado, int, int):
             est, prof, cst = (self.fila.pop()).__get()
             return est, prof, cst
-

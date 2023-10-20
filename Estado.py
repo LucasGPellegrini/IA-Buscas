@@ -6,7 +6,7 @@ class Estado:
     def heuristica(self, meta) -> int:
         pass
 
-    def fnCusto(self) -> int:
+    def fnCusto(self, estado_ant) -> int:
         pass
 
     def 

@@ -27,7 +27,7 @@ class BPI:
 
             profundidade += 1
             for vizinho in problema.acao(estado):
-                para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto()))
+                para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto(estado)))
 
             # Algoritmo Geral:
             while para_visitar:
@@ -55,8 +55,8 @@ class BPI:
                 # Continua busca
                 profundidade += 1
                 for vizinho in problema.acao(estado):
-                    if vizinho not in visitados.keys() or (custo_atual + vizinho.fnCusto()) < visitados[vizinho]
-                        para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto()))
+                    if vizinho not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho]
+                        para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto(estado)))
 
 
         retorno = False

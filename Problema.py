@@ -3,7 +3,9 @@ from Solucao import Solucao
 
 class Problema:
 
-    def __init__:(self, est_ini: Estado, est_meta: Estado) -> None:
+    # est_ini e est_meta não são tipados
+    # dependendo do problema existe mais de um (lista ou objeto).
+    def __init__(self, est_ini, est_meta) -> None:
         self.est_ini  = est_ini
         self.est_meta = est_meta
         self.solucao: Solucao = None
