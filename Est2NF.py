@@ -2,16 +2,16 @@ from Estado import Estado
 
 class Est2NF(Estado):
 
-    def __init__(self, conteudo: list[object]) -> none:
+    def __init__(self, conteudo: list[object]) -> None:
         super().__init__(conteudo)
 
     def heuristica(self, meta) -> int:
         h = 0
-        for ind, ficha in enumerate(self.conteudo[1,-1]):
+        for ind, ficha in enumerate(self.conteudo[1:-1]):
             if ficha == 'B':
                 if self.conteudo[ind-1] == 'P' and self.conteudo[ind+1] == 'P':
                     h += 1
-            else if ficha == 'P':
+            elif ficha == 'P':
                 if self.conteudo[ind-1] == 'B' and self.conteudo[ind+1] == 'B':
                     h += 1
             else:

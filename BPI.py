@@ -10,7 +10,7 @@ class BPI:
             # para_visitar -> Lista: (Estado, profundidade, custo)
             para_visitar = []
 
-            # visitados -> Dicionario[Estado] = custo
+            # visitados -> Dicionario[(Estado.conteudo)] = custo
             visitados = {}
 
             # passos -> Lista: Estado
@@ -22,26 +22,31 @@ class BPI:
 
             # Nó raiz
             estado, profundidade = (problema.est_ini, 0)
-            visitados[estado] = 0
+            visitados[tuple(estado.conteudo)] = 0
             passos.append(estado)
 
             profundidade += 1
             for vizinho in problema.acao(estado):
-                para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto(estado)))
+                para_visitar += [(vizinho, 
+                                     profundidade, 
+                                     (custo_atual + vizinho.fnCusto(estado)))]
 
             # Algoritmo Geral:
             while para_visitar:
 
                 estado, profundidade, custo_atual = para_visitar.pop()
-                visitados[estado] = custo_atual
+                visitados[tuple(estado.conteudo)] = custo_atual
+                qtd_explorada += 1
+
+                #print(f'Explorei o estado: {estado.__str__()}\n')
+                #print(f'Qtd de nós explorados: {qtd_explorada}\n')
+                #print(f'Profundidade: {profundidade}, Custo: {custo_atual}\n\n')
 
                 # tratamento do caminho
                 while len(passos) > profundidade:
                     passos.pop()
                 passos.append(estado)
 
-                qtd_explorada += 1
-                
                 # Checa solução
                 if problema.verificaObjetivo(estado):
                     problema.solucao = Solucao(qtd_explorada, passos, 
@@ -49,14 +54,14 @@ class BPI:
                     return True
 
                 # Checa limite de altura
-                if profundidade == limite:
+                if profundidade >= limite:
                     return False
 
                 # Continua busca
                 profundidade += 1
                 for vizinho in problema.acao(estado):
-                    if vizinho not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho]
-                        para_visitar.extend((vizinho, profundidade, custo_atual+vizinho.fnCusto(estado)))
+                    if tuple(vizinho.conteudo) not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[tuple(vizinho.conteudo)]:
+                        para_visitar += [(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado))]
 
 
         retorno = False

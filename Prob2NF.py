@@ -1,4 +1,5 @@
 from Est2NF import Est2NF
+from Estado import Estado
 from Problema import Problema
 
 class Prob2NF(Problema):
@@ -7,14 +8,15 @@ class Prob2NF(Problema):
         super().__init__(est_ini, est_meta)
 
     def verificaObjetivo(self, estado: Estado) -> bool:
-        if estado.conteudo in est_meta:
+        if estado.conteudo in [x.conteudo for x in self.est_meta]:
             return True
         
         return False
 
-    def __swap(self, lista, pos1, pos2): 
-        list[pos1], list[pos2] = list[pos2], list[pos1]
-        return list
+    def __swap(self, conteudo, pos1, pos2):
+        lista = conteudo[:]
+        lista[pos1], lista[pos2] = lista[pos2], lista[pos1]
+        return lista
 
     def acao(self, estado: Estado) -> list[Estado]:
         vizinhos = []
@@ -22,8 +24,8 @@ class Prob2NF(Problema):
         N = len(estado.conteudo) // 2
 
         for ind, ficha in enumerate(estado.conteudo):
-            if abs(ind - vazio_ind) <= N:
-                vizinhos.append(Estado(__swap(ind, vazio_ind)))
+            if abs(ind - vazio_ind) <= N and ind != vazio_ind:
+                vizinhos.append(Est2NF(self.__swap(estado.conteudo, ind, vazio_ind)))
 
         return vizinhos
 

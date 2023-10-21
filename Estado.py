@@ -1,6 +1,6 @@
 class Estado:
 
-    def __init__(self, conteudo: list[object]) -> none:
+    def __init__(self, conteudo: list[object]) -> None:
         self.conteudo = conteudo
 
     def heuristica(self, meta) -> int:
@@ -9,4 +9,5 @@ class Estado:
     def fnCusto(self, estado_ant) -> int:
         pass
 
-    def 
+    def __str__(self) -> str:
+        return str(self.conteudo)

@@ -13,21 +13,24 @@ class Solucao:
         self.est_meta = est_meta
         self.custo = custo
 
-    def __str__(self) -> str:
-        s:str = 'Quantidade de estados visitados = '
+    def __str__(self, h=False) -> str:
+        s:str = 'Quantidade de nos visitados = '
         s += str(self.qtd_visitados)
         s += '; \nProfundidade = '
         s += str(self.profundidade)
         s += '; \nCusto = '
         s += str(self.custo)
-        s += ';\n----------------------------\n\n'
+        s += ';\n--------------------------------\n'
 
 
         if self.passos:
+            s += '\n--------------------PASSOS--------------------\n'
             for indice, est in enumerate(self.passos):
-                s += '-=-=-=-=-=-=-=-=-=-=-=-=-PASSOS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n'
-                s += f"{indice+1}-ésimo estado (com H = {str(est.heuristica(self.est_meta))})\n\n"
+                s += f"{indice+1}º estado:\n"
                 s += est.__str__()
+                if h:
+                    s += f"\nH = {str(est.heuristica(self.est_meta))}"
+                s += f"\n\n"
 
         return s
 
