@@ -65,9 +65,8 @@ class BPI:
 
 
         retorno = False
-        altura = 1
         i = 1
-        while (not retorno or altura >= maxAlt):
+        while (not retorno and i <= maxAlt):
             retorno = __BPL__(problema, i)
             i += 1
 
