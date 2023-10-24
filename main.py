@@ -1,6 +1,7 @@
 from ASTR    import ASTR
 from BPI     import BPI
 from BMC     import BMC
+from SEML    import SEML
 from Est2NF  import Est2NF
 from Prob2NF import Prob2NF
 from Solucao import Solucao
@@ -70,8 +71,8 @@ def main():
         main()
     else: # busca == 4:
         print('\n\n\n')
-        #if SEML.busca(problema): print(problema.solucao.__str__())
-        #else: print('Solucao nao encontrada!')
+        if SEML.busca(problema): print(problema.solucao.__str__())
+        else: print('Solucao nao encontrada!')
         input("\n\nPressione <Enter> para continuar.")
         main()
 
