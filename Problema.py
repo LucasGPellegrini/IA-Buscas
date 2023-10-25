@@ -16,8 +16,11 @@ class Problema:
     def acao(self, estado: Estado) -> list[Estado]:
         pass
 
-    # def relacao(self, e1: Estado, e2: Estado) -> int:
-        # pass
+    def sucessor(self, estado: Estado, visitados: list[Estado]) -> (Estado, list[Estado]):
+        pass
+
+    def avaliacao(estado: Estado) -> int:
+        pass
 
     def __str__(self):
         s:str = ' -> Estado inicial:\n'

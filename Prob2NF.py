@@ -56,3 +56,44 @@ class Prob2NF(Problema):
 
         return vizinhos
 
+    def sucessor(self, estado: Estado, visitados: list[Estado]) -> (Estado, list[Estado]):
+        candidatos = []
+        laterais = []
+
+        for vizinho in self.acao(estado):
+            if tuple(vizinho.conteudo) not in visitados:
+                candidatos += [(vizinho, self.avaliacao(vizinho))]
+
+        candidatos = sorted(candidatos, key=lambda t : t[1])
+        
+        qtd = 0
+        i = 1
+        while i < len(candidatos):
+            if candidatos[i][1] == candidatos[i-1][1]:
+                qtd += 1
+            i += 1
+
+        proximo = candidatos.pop(0)
+        if qtd > 0: 
+            laterais = candidatos[:qtd]
+            laterais = [x[0] for x in laterais]
+
+        return proximo[0], laterais
+
+
+
+    def avaliacao(self, estado: Estado) -> int:
+        # lista de diferenças
+        ldiff = []
+
+        for meta in self.est_meta:
+            valor = 0
+            for indx, casa in enumerate(estado.conteudo):
+                if casa != meta.conteudo[indx]:
+                    valor += 1
+            ldiff.append(valor)
+
+        return min(ldiff)
+
+
+

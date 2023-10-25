@@ -24,7 +24,7 @@ class ASTR:
         visitados[tuple(estado.conteudo)] = 0
         passos.append(estado)
 
-        profundidade += 1
+        profundidade = 0
         for vizinho in problema.acao(estado):
             para_visitar.insere(Nodo(vizinho, profundidade, 
                                      custo_atual+vizinho.fnCusto(estado), 
@@ -38,10 +38,12 @@ class ASTR:
             qtd_explorada += 1
 
             # tratamento do caminho
-            while len(passos) > profundidade:
+            while len(passos) > profundidade and len(passos) > 1:
                 passos.pop()
             passos.append(estado)
  
+            profundidade += 1
+
             # Checa solução
             if problema.verificaObjetivo(estado):
                 problema.solucao = Solucao(qtd_explorada, passos, 
@@ -49,7 +51,6 @@ class ASTR:
                 return True
 
             # Continua busca
-            profundidade += 1
             for vizinho in problema.acao(estado):
                 if tuple(vizinho.conteudo) not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[tuple(vizinho.conteudo)]:
                     para_visitar.insere(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado), vizinho.heuristica(problema.est_meta)))
@@ -88,6 +89,6 @@ class FilaPrior():
         return
 
     def pop(self) -> (Estado, int, int):
-        nodo = self.fila.pop()
+        nodo = self.fila.pop(0)
         est, prof, cst = nodo.get()
         return est, prof, cst

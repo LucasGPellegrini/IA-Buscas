@@ -25,7 +25,7 @@ class BPI:
             visitados[tuple(estado.conteudo)] = 0
             passos.append(estado)
 
-            profundidade += 1
+            profundidade = 0
             for vizinho in problema.acao(estado):
                 para_visitar += [(vizinho, 
                                      profundidade, 
@@ -43,9 +43,11 @@ class BPI:
                 #print(f'Profundidade: {profundidade}, Custo: {custo_atual}\n\n')
 
                 # tratamento do caminho
-                while len(passos) > profundidade:
+                while len(passos) > profundidade and len(passos) > 1:
                     passos.pop()
                 passos.append(estado)
+                
+                profundidade += 1
 
                 # Checa solução
                 if problema.verificaObjetivo(estado):
@@ -58,7 +60,6 @@ class BPI:
                     return False
 
                 # Continua busca
-                profundidade += 1
                 for vizinho in problema.acao(estado):
                     if tuple(vizinho.conteudo) not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[tuple(vizinho.conteudo)]:
                         para_visitar += [(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado))]
