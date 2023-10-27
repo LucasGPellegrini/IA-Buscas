@@ -10,7 +10,7 @@ class SEML:
         passos = []
         custo = 0
         profundidade = 0
-        qtd_visitados = 0
+        qtd_visitados = 1
 
         corrente: Estado
         proximo: Estado

@@ -65,7 +65,7 @@ def main():
         main()
     elif busca == 3:
         print('\n\n\n')
-        if ASTR.busca(problema): print(problema.solucao.__str__())
+        if ASTR.busca(problema): print(problema.solucao.__str__(h=True))
         else: print('Solucao nao encontrada!')
         input("\n\nPressione <Enter> para continuar.")
         main()

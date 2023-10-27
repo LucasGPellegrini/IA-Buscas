@@ -9,7 +9,7 @@ class ASTR:
         # para_visitar -> ListaPrior: [Nodo]
         para_visitar = FilaPrior()
 
-        # visitados -> Dicionario[(Estado.conteudo)] = custo
+        # visitados -> Dicionario[(Estado.conteudo)] = custo+heuristica
         visitados = {}
 
         # passos -> Lista: Estado
@@ -24,24 +24,20 @@ class ASTR:
         visitados[tuple(estado.conteudo)] = 0
         passos.append(estado)
 
-        profundidade = 0
+        profundidade = 1
         for vizinho in problema.acao(estado):
             para_visitar.insere(Nodo(vizinho, profundidade, 
                                      custo_atual+vizinho.fnCusto(estado), 
-                                     vizinho.heuristica(problema.est_meta)))
+                                     vizinho.heuristica(problema.est_meta),
+                                     passos[:]))
 
         # Algoritmo Geral:
         while para_visitar:
 
-            estado, profundidade, custo_atual = para_visitar.pop()
+            estado, profundidade, custo_atual, passos = para_visitar.pop()
             visitados[tuple(estado.conteudo)] = custo_atual
             qtd_explorada += 1
-
-            # tratamento do caminho
-            while len(passos) > profundidade and len(passos) > 1:
-                passos.pop()
             passos.append(estado)
- 
             profundidade += 1
 
             # Checa solução
@@ -52,22 +48,28 @@ class ASTR:
 
             # Continua busca
             for vizinho in problema.acao(estado):
-                if tuple(vizinho.conteudo) not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[tuple(vizinho.conteudo)]:
-                    para_visitar.insere(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado), vizinho.heuristica(problema.est_meta)))
+                if (tuple(vizinho.conteudo) not in visitados.keys() 
+                    or (custo_atual + vizinho.fnCusto(estado) + vizinho.heuristica(problema.est_meta)) 
+                    < visitados[tuple(vizinho.conteudo)]):
+                    para_visitar.insere(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado),
+                                             vizinho.heuristica(problema.est_meta), passos[:]))
 
         return False
 
     
 class Nodo():
 
-    def __init__(self, estado: Estado, profundidade: int, custo: int, heuri: int):
+    def __init__(self, estado: Estado, profundidade: int,
+                 custo: int, heuri: int, passos: list[Estado]):
         self.estado = estado
         self.profundidade = profundidade
         self.custo  = custo
         self.heuri = heuri
+        self.passos = passos
 
     def get(self):
-        return (self.estado, self.profundidade, self.custo)
+        return (self.estado, self.profundidade, 
+                (self.custo+self.heuri), self.passos)
 
 
 class FilaPrior():
@@ -88,7 +90,6 @@ class FilaPrior():
         self.fila.append(nodo)
         return
 
-    def pop(self) -> (Estado, int, int):
+    def pop(self) -> (Estado, int, int, list[Estado]):
         nodo = self.fila.pop(0)
-        est, prof, cst = nodo.get()
-        return est, prof, cst
+        return nodo.get()

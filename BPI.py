@@ -25,29 +25,24 @@ class BPI:
             visitados[tuple(estado.conteudo)] = 0
             passos.append(estado)
 
-            profundidade = 0
+            profundidade = 1
             for vizinho in problema.acao(estado):
-                para_visitar += [(vizinho, 
-                                     profundidade, 
-                                     (custo_atual + vizinho.fnCusto(estado)))]
+                para_visitar += [(vizinho, profundidade, 
+                                 (custo_atual + vizinho.fnCusto(estado)),
+                                 passos[:])]
 
             # Algoritmo Geral:
             while para_visitar:
 
-                estado, profundidade, custo_atual = para_visitar.pop()
+                estado, profundidade, custo_atual, passos = para_visitar.pop()
                 visitados[tuple(estado.conteudo)] = custo_atual
                 qtd_explorada += 1
+                passos.append(estado)
+                profundidade += 1
 
                 #print(f'Explorei o estado: {estado.__str__()}\n')
                 #print(f'Qtd de nós explorados: {qtd_explorada}\n')
                 #print(f'Profundidade: {profundidade}, Custo: {custo_atual}\n\n')
-
-                # tratamento do caminho
-                while len(passos) > profundidade and len(passos) > 1:
-                    passos.pop()
-                passos.append(estado)
-                
-                profundidade += 1
 
                 # Checa solução
                 if problema.verificaObjetivo(estado):
@@ -62,7 +57,9 @@ class BPI:
                 # Continua busca
                 for vizinho in problema.acao(estado):
                     if tuple(vizinho.conteudo) not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[tuple(vizinho.conteudo)]:
-                        para_visitar += [(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado))]
+                        para_visitar += [(vizinho, profundidade, 
+                                         (custo_atual + vizinho.fnCusto(estado)),
+                                         passos[:])]
 
 
         retorno = False
