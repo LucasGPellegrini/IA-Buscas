@@ -21,7 +21,7 @@ class ASTR:
 
         # Nó raiz
         estado, profundidade = (problema.est_ini, 0)
-        visitados[tuple(estado.conteudo)] = 0
+        visitados[estado.get()] = 0
         passos.append(estado)
 
         profundidade = 1
@@ -35,7 +35,7 @@ class ASTR:
         while para_visitar:
 
             estado, profundidade, custo_atual, passos = para_visitar.pop()
-            visitados[tuple(estado.conteudo)] = custo_atual
+            visitados[estado.get()] = custo_atual
             qtd_explorada += 1
             passos.append(estado)
             profundidade += 1
@@ -48,9 +48,9 @@ class ASTR:
 
             # Continua busca
             for vizinho in problema.acao(estado):
-                if (tuple(vizinho.conteudo) not in visitados.keys() 
+                if (vizinho.get() not in visitados.keys() 
                     or (custo_atual + vizinho.fnCusto(estado) + vizinho.heuristica(problema.est_meta)) 
-                    < visitados[tuple(vizinho.conteudo)]):
+                    < visitados[vizinho.get()]):
                     para_visitar.insere(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado),
                                              vizinho.heuristica(problema.est_meta), passos[:]))
 

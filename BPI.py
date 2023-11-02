@@ -22,7 +22,7 @@ class BPI:
 
             # Nó raiz
             estado, profundidade = (problema.est_ini, 0)
-            visitados[tuple(estado.conteudo)] = 0
+            visitados[estado.get()] = 0
             passos.append(estado)
 
             profundidade = 1
@@ -35,7 +35,7 @@ class BPI:
             while para_visitar:
 
                 estado, profundidade, custo_atual, passos = para_visitar.pop()
-                visitados[tuple(estado.conteudo)] = custo_atual
+                visitados[estado.get()] = custo_atual
                 qtd_explorada += 1
                 passos.append(estado)
                 profundidade += 1
@@ -56,7 +56,7 @@ class BPI:
 
                 # Continua busca
                 for vizinho in problema.acao(estado):
-                    if tuple(vizinho.conteudo) not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[tuple(vizinho.conteudo)]:
+                    if vizinho.get() not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho.get()]:
                         para_visitar += [(vizinho, profundidade, 
                                          (custo_atual + vizinho.fnCusto(estado)),
                                          passos[:])]

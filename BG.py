@@ -1,8 +1,9 @@
+
 from Estado     import Estado
 from Solucao    import Solucao
 from Problema   import Problema
 
-class BMC:
+class BG:
 
     @staticmethod
     def busca(problema: Problema) -> bool:
@@ -27,7 +28,7 @@ class BMC:
         profundidade = 1
         for vizinho in problema.acao(estado):
             para_visitar.insere(Nodo(vizinho, profundidade,
-                                     custo_atual+vizinho.fnCusto(estado),
+                                     custo_atual+vizinho.heuristica(problema.est_meta),
                                      passos[:]))
 
         # Algoritmo Geral:
@@ -51,9 +52,9 @@ class BMC:
 
             # Continua busca
             for vizinho in problema.acao(estado):
-                if vizinho.get() not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho.get()]:
+                if vizinho.get() not in visitados.keys() or (custo_atual + vizinho.heuristica(problema.est_meta)) < visitados[vizinho.get()]:
                     para_visitar.insere(Nodo(vizinho, profundidade, 
-                                             custo_atual+vizinho.fnCusto(estado),
+                                             custo_atual+vizinho.heuristica(problema.est_meta),
                                              passos[:]))
 
         return False

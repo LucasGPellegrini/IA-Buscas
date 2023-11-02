@@ -16,7 +16,7 @@ class SEML:
         proximo: Estado
 
         corrente = problema.est_ini
-        visitados.append(tuple(corrente.conteudo))
+        visitados.append(corrente.get())
 
         movLat = []
 
@@ -38,7 +38,7 @@ class SEML:
 
             qtd_visitados += 1
 
-            visitados.append(tuple(corrente.conteudo))
+            visitados.append(corrente.get())
 
             valor_prox = problema.avaliacao(proximo)
             valor_corr = problema.avaliacao(corrente)

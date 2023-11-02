@@ -13,7 +13,7 @@ class Solucao:
         self.est_meta = est_meta
         self.custo = custo
 
-    def __str__(self, h=False) -> str:
+    def __str__(self, h=False, cmeta=False) -> str:
         s:str = 'Quantidade de nos visitados = '
         s += str(self.qtd_visitados)
         s += '; \nProfundidade = '
@@ -31,6 +31,9 @@ class Solucao:
                 if h:
                     s += f"\nH = {str(est.heuristica(self.est_meta))}"
                 s += f"\n\n"
+
+        if cmeta:
+            s += f'Custo do estado meta: {self.est_meta.fnCusto()}'
 
         return s
 
