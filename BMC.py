@@ -52,9 +52,14 @@ class BMC:
             # Continua busca
             for vizinho in problema.acao(estado):
                 if vizinho.get() not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho.get()]:
-                    para_visitar.insere(Nodo(vizinho, profundidade, 
-                                             custo_atual+vizinho.fnCusto(estado),
-                                             passos[:]))
+                    if vizinho.get() not in [x.get()[0].get() for x in para_visitar.fila]:
+                        para_visitar.insere(Nodo(vizinho, profundidade, 
+                                                 custo_atual+vizinho.fnCusto(estado),
+                                                 passos[:]))
+                    else:
+                        para_visitar.replace(Nodo(vizinho, profundidade, 
+                                                 custo_atual+vizinho.fnCusto(estado),
+                                                 passos[:]))
 
         return False
 
@@ -89,6 +94,14 @@ class FilaPrior():
         # fila vazia ou elemento de maior custo
         self.fila.append(nodo)
         return
+
+    def replace(self, nodo: Nodo) -> None:
+        # busca pelo elemento em comum:
+        for indice, instancia in enumerate(self.fila):
+            if instancia.get()[0].get() == nodo.get()[0].get():
+                if nodo.custo < instancia.custo:
+                    self.fila.pop(indice)
+                    self.insere(nodo)
 
     def pop(self) -> (Estado, int, int, list[Estado]):
         nodo = self.fila.pop(0)

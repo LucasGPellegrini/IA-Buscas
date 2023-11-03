@@ -51,8 +51,13 @@ class ASTR:
                 if (vizinho.get() not in visitados.keys() 
                     or (custo_atual + vizinho.fnCusto(estado) + vizinho.heuristica(problema.est_meta)) 
                     < visitados[vizinho.get()]):
-                    para_visitar.insere(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado),
-                                             vizinho.heuristica(problema.est_meta), passos[:]))
+                    if vizinho.get() not in [x.get()[0].get() for x in para_visitar.fila]:
+                        para_visitar.insere(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado),
+                                                 vizinho.heuristica(problema.est_meta), passos[:]))
+                    else:
+                        para_visitar.replace(Nodo(vizinho, profundidade, custo_atual+vizinho.fnCusto(estado),
+                                                 vizinho.heuristica(problema.est_meta), passos[:]))
+
 
         return False
 
@@ -82,13 +87,21 @@ class FilaPrior():
         if self.fila != []:
             # insersao por prioridade
             for idx, elem in enumerate(self.fila):
-                if (nodo.custo + nodo.heuri) <= (elem.custo + elem.heuri): 
+                if (nodo.custo + nodo.heuri) < (elem.custo + elem.heuri): 
                     self.fila.insert(idx, nodo)
                     return
 
         # fila vazia ou elemento de maior custo
         self.fila.append(nodo)
         return
+    
+    def replace(self, nodo: Nodo) -> None:
+        # busca pelo elemento em comum:
+        for indice, instancia in enumerate(self.fila):
+            if instancia.get()[0].get() == nodo.get()[0].get():
+                if (nodo.custo + nodo.heuri) < (instancia.custo + instancia.heuri): 
+                    self.fila.pop(indice)
+                    self.insere(nodo)
 
     def pop(self) -> (Estado, int, int, list[Estado]):
         nodo = self.fila.pop(0)

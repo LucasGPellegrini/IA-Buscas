@@ -57,9 +57,10 @@ class BPI:
                 # Continua busca
                 for vizinho in problema.acao(estado):
                     if vizinho.get() not in visitados.keys() or (custo_atual + vizinho.fnCusto(estado)) < visitados[vizinho.get()]:
-                        para_visitar += [(vizinho, profundidade, 
-                                         (custo_atual + vizinho.fnCusto(estado)),
-                                         passos[:])]
+                        if vizinho.get() not in [x[0].get() for x in para_visitar]:
+                            para_visitar += [(vizinho, profundidade, 
+                                             (custo_atual + vizinho.fnCusto(estado)),
+                                             passos[:])]
 
 
         retorno = False
